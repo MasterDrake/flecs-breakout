@@ -269,7 +269,7 @@ uint32_t build_brick(entt::registry &registry, Vec2f location, int type) {
 
 	//ball
 	auto brick = registry.create();
-	registry.assign<SDL_RenderSprite>(brick);
+	registry.set<SDL_RenderSprite>(brick);
 	registry.assign<Brick>(brick);
 	registry.get<Brick>(brick).score_value = score;
 	registry.assign<SpriteLocation>(brick, location);
