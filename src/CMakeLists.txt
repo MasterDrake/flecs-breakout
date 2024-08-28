@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.7)
 set(SOURCE_FILES main.cpp sdl_render.cpp vmath.cpp bitfont.cpp)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(EnTT CONFIG REQUIRED)
 find_package(flecs CONFIG REQUIRED)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
@@ -13,7 +12,6 @@ target_link_libraries(breakout
 	 $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 	$<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
-	EnTT::EnTT
 	$<IF:$<TARGET_EXISTS:flecs::flecs>,flecs::flecs,flecs::flecs_static>)
 
 

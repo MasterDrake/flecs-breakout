@@ -1,12 +1,12 @@
 #include "sdl_render.h"
 #include <SDL.h>
 #include <SDL_image.h>
-#include "entt/entt.hpp"
+#include <unordered_map>
 
-SDL_Renderer *gRenderer;
 SDL_Window *gWindow;
 
-void draw_sprite(SDL_RenderSprite& sprite, SDL_Renderer*render_target) {
+void draw_sprite(SDL_RenderSprite& sprite, SDL_Renderer*render_target)
+{
 	if (render_target && sprite.texture)
 	{
 		SDL_Rect renderQuad = sprite.to_rect();
@@ -15,20 +15,7 @@ void draw_sprite(SDL_RenderSprite& sprite, SDL_Renderer*render_target) {
 	}
 }
 
-
-void draw_sprites_sdl(entt::registry &registry)
-{
-	auto spriteview = registry.view<SDL_RenderSprite>();
-
-	for (auto et : spriteview)
-	{
-		SDL_RenderSprite &sprite = spriteview.get(et);
-		draw_sprite(sprite, gRenderer);
-	}
-}
-
-
-bool load_sprite(std::string path, SDL_RenderSprite& sprite)
+bool load_sprite(std::string path, SDL_RenderSprite* sprite)
 {
 	static std::unordered_map<std::string, SDL_RenderSprite> TextureCache;
 	//The final texture
@@ -54,24 +41,23 @@ bool load_sprite(std::string path, SDL_RenderSprite& sprite)
 				printf("successful load of sprite %s \n", path.c_str());
 			}
 
-			sprite.texture = newTexture;
-			sprite.texture_rect.x = 0;
-			sprite.texture_rect.y = 0;
-			sprite.texture_rect.w = loadedSurface->w;
-			sprite.texture_rect.h = loadedSurface->h;
-			sprite.height = loadedSurface->h;
-			sprite.width = loadedSurface->w;
-			sprite.location.x = 0;
-			sprite.location.y = 0;
-			TextureCache[path] = sprite;
+			sprite->texture = newTexture;
+			sprite->texture_rect.x = 0;
+			sprite->texture_rect.y = 0;
+			sprite->texture_rect.w = loadedSurface->w;
+			sprite->texture_rect.h = loadedSurface->h;
+			sprite->height = loadedSurface->h;
+			sprite->width = loadedSurface->w;
+			sprite->location.x = 0;
+			sprite->location.y = 0;
+			TextureCache[path] = *sprite;
 			//Get rid of old loaded surface
 			SDL_FreeSurface(loadedSurface);
-
 		}
 	}
 	else {
 		auto cached_sprite = TextureCache[path];
-		sprite = cached_sprite;
+		*sprite = cached_sprite;
 		printf("successful load of sprite from cache %s \n", path.c_str());
 	}
 
@@ -100,7 +86,7 @@ bool initialize_sdl()
 		return false;
 	}
 
-	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);
 	if (!gRenderer)
 	{
 		return false;

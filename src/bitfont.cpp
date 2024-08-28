@@ -53,7 +53,7 @@ ParamToken parse_parameter(const string &target)
 bool load_font(BitFont& font, std::string image_path, std::string info_path)
 {
 	SDL_RenderSprite all_sprite;
-	if (!load_sprite(image_path, all_sprite))
+	if (!load_sprite(image_path, &all_sprite))
 	{
 		return false;
 	}

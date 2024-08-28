@@ -1,5 +1,4 @@
 #pragma once
-#include "entt/fwd.hpp"
 #include "vmath.h"
 #include "SDL_rect.h"
 #include <string>
@@ -16,6 +15,7 @@ struct SDL_Renderer;
 struct SDL_Window;
 struct SDL_Texture;
 
+static SDL_Renderer* gRenderer;
 
 struct SDL_RenderSprite {
 
@@ -31,9 +31,8 @@ struct SDL_RenderSprite {
 	}
 };
 void draw_sprite(SDL_RenderSprite& sprite, SDL_Renderer*render_target);
-void draw_sprites_sdl(entt::registry &registry);
 
-bool load_sprite(std::string path, SDL_RenderSprite& sprite);
+bool load_sprite(std::string path, SDL_RenderSprite* sprite);
 
 bool initialize_sdl();
 void start_frame();
